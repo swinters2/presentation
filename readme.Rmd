@@ -7,33 +7,49 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+First installed all needed packages.
+
 ```{r}
 library(dplyr)
 # install.packages("tidyverse")
 library(tidyverse)
 
-####What is the top 5 movie genres in the database
+```
+
+Then we read the movie genres data into R and viewed the data to see what question could be answered.
+
+```{r}
 
 my_data <- read.csv("data/movie_genres.csv")
 
 head(my_data)
+```
 
+The question we answered were "What genres include three or more movies?"
+We created a new data frame that showed the movie count of 3 or more for those particular genres.
 
-
+```{r}
 top_movies <- my_data %>%
   group_by(genre) %>%
   summarise(movie_count = n()) %>%
   filter(movie_count >= 3)
+```
 
-# view(movie_count)
+Here we rearranged the data to show the genres in order by count instead of alphabetical order. 
+
+```{r}
 
 top_movies <- top_movies %>%
   arrange(desc(movie_count))
 
-# top_movies
-
 top_movies$genre <- reorder(top_movies$genre, top_movies$movie_count)
 
+```
+
+Here we plotted the results in a histogram and included the order as assigning labels and giving each bar a specific color. 
+
+```{r}
 # install.packages("ggplot2")
 library(ggplot2)
 
@@ -45,6 +61,7 @@ ggplot(top_movies, aes(x = genre, y = movie_count, fill = genre)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)
   )
-
 ```
+
+
 
